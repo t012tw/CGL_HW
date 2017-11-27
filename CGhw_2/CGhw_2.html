@@ -75,7 +75,7 @@ newTarget();
 
 function newTarget(){
 	var geometry = new THREE.CylinderGeometry(10, 10, 10, 32 )
-  var material = new THREE.MeshNormalMaterial;
+  var material = new THREE.MeshPhongMaterial( { color: 0xff4c4c, specular: 0xb5d5ff, shininess: 100, morphTargets: true, vertexColors: THREE.FaceColors, flatShading: true } );
   target = new THREE.Mesh( geometry.clone(), material.clone() );
   target.position.set(-80,30,Math.random() * 201 - 100);
   target.rotation.z += Math.PI/2;
@@ -105,10 +105,11 @@ function init() {
   toggle = false;
   scene = new THREE.Scene();
   ////////////////////////////////////////////////////////////////////////////////////////// 
-  var base = new THREE.Mesh(new THREE.BoxGeometry(40, 10, 20), new THREE.MeshNormalMaterial);
-  var fort = new THREE.Mesh(new THREE.CylinderGeometry(10, 10, 10, 32 ), new THREE.MeshNormalMaterial);
-  var barrel1 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 10, 32 ), new THREE.MeshNormalMaterial);
-  var barrel2 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 10, 32 ), new THREE.MeshNormalMaterial);
+  var material = new THREE.MeshPhongMaterial( { color: 0xb5d5ff, specular: 0xb5d5ff, shininess: 100, morphTargets: true, vertexColors: THREE.FaceColors, flatShading: true } );
+  var base = new THREE.Mesh(new THREE.BoxGeometry(40, 10, 20), material);
+  var fort = new THREE.Mesh(new THREE.CylinderGeometry(10, 10, 10, 32 ), material);
+  var barrel1 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 10, 32 ), material);
+  var barrel2 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 10, 32 ), material);
   
   base_ob.add(base);
   fort_ob.add(fort);
@@ -132,8 +133,8 @@ function init() {
   var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
   scene.add(gridXZ);
   ////////////////////////////////////////////////////////////////////////////////////////// 
-  //light = new THREE.PointLight( 0xd0d319, 1.5, 80 );
-	//scene.add( light );
+  light = new THREE.HemisphereLight( 0xffffff, 0x080820, 1 );
+	scene.add( light );
   //////////////////////////////////////////////////////////////////////////////////////////  
   ballMesh = new THREE.Mesh(new THREE.SphereGeometry(1.5, 20, 20), new THREE.MeshNormalMaterial());
   balls = [];
@@ -218,7 +219,7 @@ function animate() {
   		base_ob.position.x += 0.8*Math.cos(angle_base);
       base_ob.position.z -= 0.8*Math.sin(angle_base);
   }
-  //light.position.copy(base_ob.localToWorld(new THREE.Vector3(0, 0, 0)));
+  light.position.copy(base_ob.localToWorld(new THREE.Vector3(0, 50, 0)));
   base_ob.rotation.y = angle_base;
   fort_ob.rotation.y = angle_fort;
   barrel1_ob.rotation.y = angle_barrel1;
@@ -235,6 +236,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
   renderer.setSize(width, height);
 }
+
 
 </script>
 </body>
